@@ -13,8 +13,8 @@ from wetterdienst.dwd.observations import (
 )
 from wetterdienst.exceptions import InvalidParameterCombination
 
-from figures import default_figure
-from ui.layouts import dashboard_layout
+from ui.plotting.figure import default_figure
+from ui.layouts.observations_germany import dashboard_layout
 
 app = dash.Dash(
     __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]

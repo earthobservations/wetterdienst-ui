@@ -19,3 +19,22 @@ The wetterdiens-ui currently covers access to:
   Both historical, recent and near real time.
 
 
+Run UI
+========
+Run the wetterdienst user interface from the project directory by these commands:
+
+* CLI: `python3 ui/app.py`
+
+Access via: http://127.0.0.1:8050/
+Don't forget to set the `PYTHONPATH`
+
+Issues
+========
+* Add a loader icon while data will be downloaded
+* Support run in Docker
+* Implement different figure types for different data types
+* Provide more information for weather station (location, avail.) on the front-end
+* Display extremes of actual visualisation
+* Support overlays
+* Zoom map to selected station
+* enable select station by click on an icon on map (requires ipyleaflet)
