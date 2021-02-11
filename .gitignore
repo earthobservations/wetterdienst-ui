@@ -1,0 +1,10 @@
+*.code-workspace
+__pycache__/
+.idea/
+.venv*
+*.egg-info
+.nox/
+.pytest_cache/
+docs/_build/
+dist/
+tmp/

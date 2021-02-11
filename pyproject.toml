@@ -1,0 +1,110 @@
+[tool.poetry]
+name = "wetterdienst-ui"
+version = "0.0.1"
+description = "Open weather data for humans"
+authors = [
+    "Benjamin Gutzmann <gutzemann@gmail.com>",
+    "Andreas Motl <andreas.motl@panodata.org>",
+    "Daniel Lassahn <daniel.lassahn@meteointelligence.de>"
+]
+license = "MIT"
+readme = "README.rst"
+include = [
+    "LICENSE.rst",
+    "CHANGELOG.rst",
+]
+homepage = "https://wetterdienst.readthedocs.io/"
+repository = "https://github.com/earthobservations/wetterdienst-ui"
+keywords = [
+    "dwd",
+    "deutscher wetterdienst",
+    "german weather service",
+    "weather",
+    "weather-data",
+    "weather-api",
+    "open-data",
+    "observations",
+    "historical-data",
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
+    "Topic :: Communications",
+    "Topic :: Database",
+    "Topic :: Internet",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Topic :: Scientific/Engineering :: GIS",
+    "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Archiving",
+    "Topic :: Text Processing",
+    "Topic :: Utilities",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS"
+]
+
+[tool.poetry.dependencies]
+python = "^3.6.1"
+pandas = "^1.1.2"
+tables = "^3.6.1"
+numpy = "^1.19.2"
+scipy = "^1.5.2"
+plotly = "^4.14.0"
+dash = "^1.19.0"
+
+
+[tool.poetry.extras]
+ipython = ["ipython", "ipython-genutils", "matplotlib"]
+excel = ["openpyxl"]
+docs = [
+    "sphinx",
+    "sphinx-material",
+    "tomlkit",
+    "sphinx-autodoc-typehints",
+    "sphinxcontrib-svg2pdfconverter",
+    "matplotlib",
+    "ipython"
+]
+
+[tool.poetry.dev-dependencies]
+nox = "^2020.8.22"
+black = "^20.8b1"
+flake8 = "^3.8.3"
+flake8-black = "^0.2.1"
+flake8-bugbear = "^20.1.4"
+flake8-bandit = "^2.1.2"
+coverage = {extras = ["toml"], version = "^5.3"}
+pytest = "^6.0.2"
+pytest-cov = "^2.10.1"
+mock = "^4.0.2"
+surrogate = "^0.1"
+matplotlib = "^3.3.2"
+
+[tool.poetry.scripts]
+wetterdienst-ui = 'wetterdienst-ui.cli:run'
+
+[tool.pytest.ini_options]
+markers = [
+    "remote: Tests accessing the internet.",
+    "slow: Slow tests.",
+]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
