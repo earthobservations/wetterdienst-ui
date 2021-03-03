@@ -1,20 +1,22 @@
 """ main app for wetterdienst-ui """
+import os
+
 import dash
 import pandas as pd
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 from wetterdienst.dwd.observations import (
-    DWDObservationSites,
-    DWDObservationData,
+    DWDObservationStations,
+    DWDObservationValues,
     DWDObservationPeriod,
     DWDObservationResolution,
     DWDObservationParameterSet,
 )
 from wetterdienst.exceptions import InvalidParameterCombination
 
-from ui.plotting.figure import default_figure
 from ui.layouts.observations_germany import dashboard_layout
+from ui.plotting.figure import default_figure
 
 app = dash.Dash(
     __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
@@ -22,6 +24,10 @@ app = dash.Dash(
 server = app.server
 
 app.layout = dashboard_layout()
+
+OBSERVATION_VALUES_PARAMETER_COLUMN = "PARAMETER"
+OBSERVATION_VALUES_VALUE_COLUMN = "VALUE"
+OBSERVATION_VALUES_DATE_COLUMN = "DATE"
 
 
 @app.callback(
@@ -39,8 +45,8 @@ def update_meta_data(parameter, time_resolution, period_type):
     It stores MetaData behind a hidden div on the front-end
     """
     try:
-        meta_data = DWDObservationSites(
-            parameter_set=DWDObservationParameterSet(parameter),
+        meta_data = DWDObservationStations(
+            parameter=DWDObservationParameterSet(parameter),
             resolution=DWDObservationResolution(time_resolution),
             period=DWDObservationPeriod(period_type),
         ).all()
@@ -83,17 +89,19 @@ def update_data(
     station_id: int, parameter: str, time_resolution: str, period_type: str
 ):
     """ stores selected data behind a hidden div box to share with other callbacks """
-    climate_data = DWDObservationData(
-        station_ids=[station_id],
-        parameters=[DWDObservationParameterSet(parameter)],
+    climate_data = DWDObservationValues(
+        station_id=station_id,
+        parameter=DWDObservationParameterSet(parameter),
         resolution=DWDObservationResolution(time_resolution),
-        periods=[DWDObservationPeriod(period_type)],
-        humanize_column_names=True,
-    ).collect_safe()
+        period=DWDObservationPeriod(period_type),
+        humanize_parameters=True,
+    ).all()
     climate_data = climate_data.dropna(axis=0)
     climate_data.VALUE = climate_data.VALUE.astype(float)
     climate_data = climate_data.pivot_table(
-        values="VALUE", columns="ELEMENT", index="DATE"
+        values=OBSERVATION_VALUES_VALUE_COLUMN,
+        columns=OBSERVATION_VALUES_PARAMETER_COLUMN,
+        index=OBSERVATION_VALUES_DATE_COLUMN,
     )
     return climate_data.to_json(date_format="iso", orient="split")
 
@@ -123,15 +131,15 @@ def update_systems_map(jsonified_data):
     meta_data = pd.read_json(jsonified_data, orient="split")
     fig = go.Figure(
         go.Scattermapbox(
-            lat=meta_data.LAT,
-            lon=meta_data.LON,
+            lat=meta_data.LATITUDE,
+            lon=meta_data.LONGITUDE,
             mode="markers",
             marker=go.scattermapbox.Marker(size=10),
             text=[
                 f"{name} <br>Station Height: {altitude}m <br>Id: {station_id}"
                 for name, altitude, station_id in zip(
                     meta_data.STATION_NAME,
-                    meta_data.STATION_HEIGHT,
+                    meta_data.HEIGHT,
                     meta_data.STATION_ID,
                 )
             ],
@@ -158,4 +166,5 @@ def update_systems_map(jsonified_data):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    port = int(os.environ.get("PORT", 8050))
+    server.run(host="0.0.0.0", port=port, processes=4)
