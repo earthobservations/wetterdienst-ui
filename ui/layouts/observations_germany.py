@@ -1,7 +1,6 @@
 """ holds html layout for observation dashboard """
-import dash_html_components as html
 import dash_core_components as dcc
-
+import dash_html_components as html
 from wetterdienst.dwd.observations import (
     DWDObservationPeriod,
     DWDObservationResolution,
@@ -57,11 +56,19 @@ def dashboard_layout() -> html:
                                 multi=False,
                                 className="dcc_control",
                             ),
-                            html.P("Select variable when data was downloaded:"),
-                            dcc.Dropdown(
-                                id="select-variable",
-                                multi=False,
-                                className="dcc_control",
+                            html.P("Select variable:"),
+                            dcc.Loading(
+                                id="loading-1",
+                                children=[
+                                    dcc.Dropdown(
+                                        id="select-variable",
+                                        multi=False,
+                                        className="dcc_control",
+                                    ),
+                                    html.Div(
+                                        [], id="hidden-div", style={"display": "None"}
+                                    ),
+                                ],
                             ),
                         ],
                         className="pretty_container four columns",
@@ -89,7 +96,6 @@ def dashboard_layout() -> html:
                 ],
                 className="row flex-display",
             ),
-            html.Div([], id="hidden-div", style={"display": "None"}),
             html.Div([], id="hidden-div-metadata", style={"display": "None"}),
         ],
         id="mainContainer",

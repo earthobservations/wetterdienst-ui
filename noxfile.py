@@ -59,14 +59,14 @@ def coverage(session: Session) -> None:
 locations = "ui", "tests", "noxfile.py"
 
 
-@nox.session(python=["3.6", "3.7", "3.8"])
+@nox.session(python=["3.6", "3.7", "3.8", "3.9"])
 def black(session):
     args = session.posargs or locations
     session.install("black")
     session.run("black", *args)
 
 
-@nox.session(python=["3.6", "3.7", "3.8"])
+@nox.session(python=["3.6", "3.7", "3.8", "3.9"])
 def lint(session):
     args = session.posargs or locations
     session.install("flake8", "flake8-bandit", "flake8-black", "flake8-bugbear")
