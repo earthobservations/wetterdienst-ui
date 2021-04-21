@@ -1,5 +1,14 @@
+**Note:** Wetterdienst-UI has been relocated_ into Wetterdienst_ itself and was renamed to `Wetterdienst Explorer`_.
+
+.. _relocated: https://github.com/earthobservations/wetterdienst/tree/main/wetterdienst/ui/explorer
+.. _Wetterdienst: https://github.com/earthobservations/wetterdienst
+.. _Wetterdienst Explorer: https://wetterdienst.readthedocs.io/en/latest/usage/explorer.html
+
+----
+
+
 ###################################################
-Wetterdienst-UI - Broswer for DWD open weather data
+Wetterdienst-UI - Browser for DWD open weather data
 ###################################################
 
 Introduction
